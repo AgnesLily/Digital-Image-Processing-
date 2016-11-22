@@ -5,17 +5,17 @@
 using namespace cv;
 using namespace std;
 
-//ÌáÈ¡alphaÍ¨µÀ²¢ÏÔÊ¾
+//æå–alphaé€šé“å¹¶æ˜¾ç¤º
 void test1(){
 	Mat img = imread("a.png", CV_LOAD_IMAGE_UNCHANGED);
-	int imageHeight = img.rows;//Í¼ÏñµÄ¸ß
-	int imageWidth = img.cols;//Í¼ÏñµÄ¿í
-	int step = img.step;//Ã¿ĞĞµÄ×Ö½ÚÊı
-	uchar *inputImageData = img.data;//Í¼ÏñĞÅÏ¢
-	int nc = img.channels();;//Í¨µÀÊı
+	int imageHeight = img.rows;//å›¾åƒçš„é«˜
+	int imageWidth = img.cols;//å›¾åƒçš„å®½
+	int step = img.step;//æ¯è¡Œçš„å­—èŠ‚æ•°
+	uchar *inputImageData = img.data;//å›¾åƒä¿¡æ¯
+	int nc = img.channels();;//é€šé“æ•°
 	Mat outImg(imageHeight, imageWidth, CV_8UC4);
 
-	//±éÀúÏñËØ
+	//éå†åƒç´ 
 	for (int i = 0; i < imageHeight; ++i, inputImageData += step)
 	{
 		uchar *px = inputImageData;
@@ -33,29 +33,28 @@ void test1(){
 	waitKey();
 }
 
-//µÃµ½Ä³ÏñËØ
+//å¾—åˆ°æŸåƒç´ 
 uchar*  get_pixel(const Mat &img, int x, int y) { 
 	return (uchar*)img.data + y*img.step + x * 4;
 }
 
-//Ê¹ÓÃalpha»ìºÏÌæ»»±³¾°Í¼
-void test2(){
-	Mat bgImg = imread("bg.png", CV_LOAD_IMAGE_UNCHANGED);//±³¾°Í¼
-	Mat frImg = imread("a.png", CV_LOAD_IMAGE_UNCHANGED);//Ç°¾°Í¼
-	int imageHeight = frImg.rows;//ROIÇøÓòµÄ¸ß
-	int imageWidth = frImg.cols;//ROIÇøÓòµÄ¿í
-	int step = bgImg.step;//Ã¿ĞĞµÄ×Ö½ÚÊı
-	int nc = bgImg.channels();//±³¾°Í¼Í¨µÀÊı
+//ä½¿ç”¨alphaæ··åˆæ›¿æ¢èƒŒæ™¯å›¾void test2(){
+	Mat bgImg = imread("bg.png", CV_LOAD_IMAGE_UNCHANGED);//èƒŒæ™¯å›¾
+	Mat frImg = imread("a.png", CV_LOAD_IMAGE_UNCHANGED);//å‰æ™¯å›¾
+	int imageHeight = frImg.rows;//ROIåŒºåŸŸçš„é«˜
+	int imageWidth = frImg.cols;//ROIåŒºåŸŸçš„å®½
+	int step = bgImg.step;//æ¯è¡Œçš„å­—èŠ‚æ•°
+	int nc = bgImg.channels();//èƒŒæ™¯å›¾é€šé“æ•°
 
-	uchar *ROI = get_pixel(bgImg, 0, 0);//µÃµ½ROIÇøÓòµÄÆğÊ¼ÏñËØÎ»ÖÃ
+	uchar *ROI = get_pixel(bgImg, 0, 0);//å¾—åˆ°ROIåŒºåŸŸçš„èµ·å§‹åƒç´ ä½ç½®
 
 	for (int i = 0; i < imageHeight; ++i, ROI += step)
 	{
-		uchar *px = ROI;//±éÀúROIµÃµ½µÄÏñËØ
+		uchar *px = ROI;//éå†ROIå¾—åˆ°çš„åƒç´ 
 		for (int j = 0; j < imageWidth; ++j, px += nc)
 		{
-			uchar *pixel = get_pixel(frImg, j, i);//Ç°¾°Í¼ÔÚ(j,i)µÄÏñËØ!!		
-			//alpha»ìºÏËã·¨
+			uchar *pixel = get_pixel(frImg, j, i);//å‰æ™¯å›¾åœ¨(j,i)çš„åƒç´ !!		
+			//alphaæ··åˆç®—æ³•
 			double opcity = (double)(pixel[3]) / 255;
 			px[0] = pixel[0] * opcity + px[0] * (1 - opcity);
 			px[1] = pixel[1] * opcity + px[1] * (1 - opcity);
@@ -73,8 +72,7 @@ void main() {
 }
 
 
-//¸ßË¹ÂË²¨
-/*
-void Gaussian(const Mat  &input, Mat  &output, double sigma){	int window = floor(6 * sigma - 1) / 2 * 2 + 1;//ÆæÊı	int cols = input.cols;	int rows = input.rows;		//Ê¹ÓÃĞĞÁĞ·ÖÀëĞÔÀ´¼ÓËÙÂË²¨	//ÏÈ¶ÔĞĞ½øĞĞ¸ßË¹ÂË²¨	for (int i = 0; i < rows; i++){		for (int j = 0; j < cols; j++){		}	}	//ÔÙ¶ÔÁĞ½øĞĞ¸ßË¹ÂË²¨}*/
+
+
 
 
